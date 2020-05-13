@@ -1,0 +1,24 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+driver:
+  name: docker
+#lint: |
+#  set -e
+#  yamllint .
+#  ansible-lint
+platforms:
+  - name: instance
+    image: ${MOLECULE_DISTRO:-ubuntu:xenial}
+    privileged: true
+    command: ${MOLECULE_COMMAND:-"sleep infinity"}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+  options:
+    vvv: True

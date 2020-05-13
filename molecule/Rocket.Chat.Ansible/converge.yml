@@ -1,0 +1,41 @@
+---
+- name: Converge
+  hosts: all
+  pre_tasks:
+    - name: Update package cache
+      package: update_cache=yes
+      changed_when: false
+      register: task_result
+      until: task_result is success
+      retries: 10
+      delay: 2
+    - name: create containerd folder
+      file:
+        path: /etc/systemd/system/containerd.service.d
+        state: directory
+      when: ansible_service_mgr == "systemd"
+    - name: override file for containerd
+      copy:
+        src: files/override.conf
+        dest: /etc/systemd/system/containerd.service.d/override.conf
+      when: ansible_service_mgr == "systemd"
+  tasks:
+    - name: Install Java
+      include_role:
+        name: geerlingguy.java
+      collections:
+        - ansible.legacy
+      vars:
+        java_packages: java-11-openjdk
+      when: ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
+    - name: Install Java
+      include_role:
+        name: geerlingguy.java
+      collections:
+        - ansible.legacy
+      vars:
+        java_packages: openjdk-11-jdk
+      when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
+    - name: Install Artifactory
+      include_role:
+        name: serienmorder.artifactory.artifactory_install
