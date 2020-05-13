@@ -19,7 +19,3 @@
         src: files/override.conf
         dest: /etc/systemd/system/containerd.service.d/override.conf
       when: ansible_service_mgr == "systemd"
-  tasks:
-    - name: Install Rocket Chat Role
-      include_role:
-        name: Rocket.Chat.Ansible
