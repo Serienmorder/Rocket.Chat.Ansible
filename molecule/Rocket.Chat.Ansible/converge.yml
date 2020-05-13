@@ -20,22 +20,6 @@
         dest: /etc/systemd/system/containerd.service.d/override.conf
       when: ansible_service_mgr == "systemd"
   tasks:
-    - name: Install Java
+    - name: Install Rocket Chat Role
       include_role:
-        name: geerlingguy.java
-      collections:
-        - ansible.legacy
-      vars:
-        java_packages: java-11-openjdk
-      when: ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
-    - name: Install Java
-      include_role:
-        name: geerlingguy.java
-      collections:
-        - ansible.legacy
-      vars:
-        java_packages: openjdk-11-jdk
-      when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
-    - name: Install Artifactory
-      include_role:
-        name: serienmorder.artifactory.artifactory_install
+        name: Rocket.Chat.Ansible
